@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.m2tmdbroques.databinding.ActivityMainBinding
+import com.example.m2tmdbroques.model.Person
 import com.example.m2tmdbroques.model.PersonPopularResponse
 import retrofit2.Call
 import retrofit2.Callback
@@ -14,7 +15,8 @@ class MainActivity : AppCompatActivity() {
     val LOGTAG = MainActivity::class.simpleName
 
     private lateinit var binding: ActivityMainBinding
-
+    private lateinit var personPopularAdapter: PersonPopularAdapter
+    private var persons = arrayListOf<Person>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -23,17 +25,27 @@ class MainActivity : AppCompatActivity() {
         // Init recycler view
         binding.popularPersonRv.setHasFixedSize(true)
         binding.popularPersonRv.layoutManager = LinearLayoutManager(this)
+        personPopularAdapter = PersonPopularAdapter()
+        binding.popularPersonRv.adapter = personPopularAdapter
 
+        loadPage(1)
+    }
+
+    private fun loadPage(page: Int) {
         val tmdbapi = ApiClient.instance.create(ITmdbApi::class.java)
 
-        val call = tmdbapi.getPopularPerson(TMDB_API_KEY, 1)
+        val call = tmdbapi.getPopularPerson(TMDB_API_KEY, page)
 
         call.enqueue(object : Callback<PersonPopularResponse> {
             override fun onResponse(
                 call: Call<PersonPopularResponse>,
                 response: Response<PersonPopularResponse>
             ) {
-                Log.d(LOGTAG, response.body().toString())
+                if (response.isSuccessful) {
+                    persons.addAll(response.body()?.results!!)
+                } else {
+                    Log.d(LOGTAG, "Call to getPopularPerson failed with error ${response.code()}")
+                }
             }
 
             override fun onFailure(call: Call<PersonPopularResponse>, t: Throwable) {
