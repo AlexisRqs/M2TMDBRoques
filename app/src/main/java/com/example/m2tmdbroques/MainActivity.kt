@@ -2,12 +2,15 @@ package com.example.m2tmdbroques
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.example.m2tmdbroques.model.PersonPopularResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
+    val LOGTAG = MainActivity::class.simpleName
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -21,11 +24,11 @@ class MainActivity : AppCompatActivity() {
                 call: Call<PersonPopularResponse>,
                 response: Response<PersonPopularResponse>
             ) {
-                println("Response unsuccessful")
+                Log.d(LOGTAG, response.body().toString())
             }
 
             override fun onFailure(call: Call<PersonPopularResponse>, t: Throwable) {
-                TODO("Not yet implemented")
+                Log.e(LOGTAG, "Call to getPopularPerson failed")
             }
         }   )
     }
