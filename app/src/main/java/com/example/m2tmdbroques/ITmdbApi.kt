@@ -1,5 +1,7 @@
 package com.example.m2tmdbroques
 
+import com.example.m2tmdbroques.model.PersonPopularResponse
+import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -10,5 +12,5 @@ interface ITmdbApi {
     fun getPopularPerson(
         @Query("api_key") apiKey: String,
         @Query("page") pageNumber: Int
-    )
+    ): Call<PersonPopularResponse>
 }
