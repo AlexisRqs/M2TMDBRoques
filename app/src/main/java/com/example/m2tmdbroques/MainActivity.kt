@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
                 call: Call<PersonPopularResponse>,
                 response: Response<PersonPopularResponse>
             ) {
-                TODO("Not yet implemented")
+                println("Response unsuccessful")
             }
 
             override fun onFailure(call: Call<PersonPopularResponse>, t: Throwable) {
