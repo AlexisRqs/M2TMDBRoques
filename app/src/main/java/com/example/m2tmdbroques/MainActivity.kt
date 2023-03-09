@@ -25,10 +25,12 @@ class MainActivity : AppCompatActivity() {
         // Init recycler view
         binding.popularPersonRv.setHasFixedSize(true)
         binding.popularPersonRv.layoutManager = LinearLayoutManager(this)
-        personPopularAdapter = PersonPopularAdapter()
+        personPopularAdapter = PersonPopularAdapter(persons)
         binding.popularPersonRv.adapter = personPopularAdapter
 
         loadPage(1)
+
+
     }
 
     private fun loadPage(page: Int) {
@@ -43,6 +45,7 @@ class MainActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     persons.addAll(response.body()?.results!!)
+                    personPopularAdapter.notifyDataSetChanged()
                 } else {
                     Log.d(LOGTAG, "Call to getPopularPerson failed with error ${response.code()}")
                 }
