@@ -3,6 +3,8 @@ package com.example.m2tmdbroques
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.m2tmdbroques.databinding.ActivityMainBinding
 import com.example.m2tmdbroques.model.PersonPopularResponse
 import retrofit2.Call
 import retrofit2.Callback
@@ -11,11 +13,16 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity() {
     val LOGTAG = MainActivity::class.simpleName
 
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-
+        // Init recycler view
+        binding.popularPersonRv.setHasFixedSize(true)
+        binding.popularPersonRv.layoutManager = LinearLayoutManager(this)
 
         val tmdbapi = ApiClient.instance.create(ITmdbApi::class.java)
 
